@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ias.aves.models.dto.AveDto;
 import com.ias.aves.models.entity.Ave;
@@ -32,17 +33,23 @@ public class AveServiceImpl implements AveService {
 	}
 	
 	@Override
+	@Transactional
 	public boolean saveAve(AveDto aveDto) {
 		if(Objects.nonNull(aveDto) && Objects.nonNull(aveDto.getPaises())){
-			Ave ave = this.modelMapper.map(aveDto, Ave.class);
-			this.aveReepository.save(ave);
-			return true;			
+			if(!this.aveReepository.existsById(aveDto.getCdAve())) {
+				Ave ave = this.modelMapper.map(aveDto, Ave.class);
+				this.aveReepository.save(ave);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteAve(String cdAve) {
 		if(this.aveReepository.existsById(cdAve)) {
 			this.aveReepository.deleteById(cdAve);
