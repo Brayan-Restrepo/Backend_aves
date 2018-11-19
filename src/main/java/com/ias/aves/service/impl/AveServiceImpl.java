@@ -42,4 +42,14 @@ public class AveServiceImpl implements AveService {
 		}
 	}
 
+	@Override
+	public boolean deleteAve(String cdAve) {
+		if(this.aveReepository.existsById(cdAve)) {
+			this.aveReepository.deleteById(cdAve);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

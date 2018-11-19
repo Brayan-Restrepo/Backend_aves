@@ -8,4 +8,5 @@ public interface AveService {
 
 	public List<AveDto> findAll();
 	public boolean saveAve(AveDto aveDto);
+	public boolean deleteAve(String cdAve);
 }
