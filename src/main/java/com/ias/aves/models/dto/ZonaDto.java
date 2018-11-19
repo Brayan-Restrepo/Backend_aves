@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ZonaDto implements Serializable {
 	
-	private String cdZona;	
+	private String cdZona;
 	private String dsNombre;
 		
 	public String getCdZona() {

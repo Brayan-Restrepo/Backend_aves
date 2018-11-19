@@ -1,7 +1,9 @@
 package com.ias.aves.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ias.aves.models.dto.AveDto;
 import com.ias.aves.models.entity.Ave;
+import com.ias.aves.models.entity.Pais;
 import com.ias.aves.repository.AveRepository;
+import com.ias.aves.repository.PaisRepository;
 import com.ias.aves.service.AveService;
 
 @Service
@@ -19,6 +23,9 @@ public class AveServiceImpl implements AveService {
 
 	@Autowired
 	private AveRepository aveReepository;
+	
+	@Autowired
+	private PaisRepository paisReepository;
 
 	private ModelMapper modelMapper;
 	
@@ -27,6 +34,7 @@ public class AveServiceImpl implements AveService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public List<AveDto> findAll() {
 		List<Ave> aveList = (List<Ave>) this.aveReepository.findAll();		
 		return aveList.stream().map(ave -> modelMapper.map(ave, AveDto.class)).collect(Collectors.toList());
@@ -47,6 +55,26 @@ public class AveServiceImpl implements AveService {
 			return false;
 		}
 	}
+	
+	@Override
+	@Transactional
+	public boolean updateAve(AveDto aveDto) {
+		if(Objects.nonNull(aveDto) && Objects.nonNull(aveDto.getPaises()) 
+				&& this.aveReepository.existsById(aveDto.getCdAve())) {
+				
+			Ave ave = this.modelMapper.map(aveDto, Ave.class);
+			Set<Pais> paises = new HashSet<>();
+			for (Pais pais : ave.getPaises()) {
+				Pais p = this.paisReepository.findById(pais.getCdPais()).get();
+				paises.add(p);
+			}
+			ave.setPaises(paises);
+			this.aveReepository.save(ave);			
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	@Transactional
@@ -57,6 +85,12 @@ public class AveServiceImpl implements AveService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public List<AveDto> buscarAve(String nombre, String zona) {
+		List<Ave> aves = this.aveReepository.findByNombresLikeZonaLike(nombre, zona);
+		return aves.stream().map(ave -> this.modelMapper.map(ave, AveDto.class)).collect(Collectors.toList());
 	}
 
 }

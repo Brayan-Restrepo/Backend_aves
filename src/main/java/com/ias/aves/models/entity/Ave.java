@@ -48,6 +48,10 @@ public class Ave implements Serializable{
 		this.paises = paises;
 	}
 
+	public void addPais(Pais pais) {
+		this.paises.add(pais);
+	}
+
 	public String getCdAve() {
 		return cdAve;
 	}
