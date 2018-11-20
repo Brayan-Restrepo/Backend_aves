@@ -2,7 +2,7 @@ package com.ias.aves.models.dto.in;
 
 import java.io.Serializable;
 
-public class AveBuscarInDto implements Serializable {
+public class AveBuscarDtoIn implements Serializable {
 
 	private String nombre;
 	private String cdZona;

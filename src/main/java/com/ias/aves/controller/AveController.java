@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ias.aves.models.dto.AveDto;
 import com.ias.aves.models.dto.PaisDto;
+import com.ias.aves.models.dto.ResponseDto;
 import com.ias.aves.models.dto.ZonaDto;
-import com.ias.aves.models.dto.in.AveBuscarInDto;
+import com.ias.aves.models.dto.in.AveBuscarDtoIn;
+import com.ias.aves.models.dto.in.AveUpdateDtoIn;
 import com.ias.aves.service.AveService;
 import com.ias.aves.service.PaisService;
 import com.ias.aves.service.ZonaService;
@@ -41,28 +43,25 @@ public class AveController {
 	}
 	
 	@PostMapping(ConstantesUtil.AVE)
-	public boolean ave(@RequestBody AveDto aveDto) {		
+	public ResponseDto ave(@RequestBody AveDto aveDto) {		
 		return this.aveService.saveAve(aveDto);
 	}
 	
 	@PutMapping(ConstantesUtil.AVE)
-	public boolean update(@RequestBody AveDto aveDto) {		
-		return this.aveService.updateAve(aveDto);
+	public ResponseDto update(@RequestBody AveUpdateDtoIn aveUpdateDtoIn) {		
+		return this.aveService.updateAve(aveUpdateDtoIn);
 	}
 	
 	@DeleteMapping(ConstantesUtil.AVE+"/{cdAve}")
-	public boolean deleteAve(@PathVariable("cdAve") String cdAve) {		
+	public ResponseDto deleteAve(@PathVariable("cdAve") String cdAve) {		
 		return this.aveService.deleteAve(cdAve);
 	}
 	
-	@PostMapping(ConstantesUtil.AVES+"/buscar")
-	public List<AveDto> findAve(@RequestBody AveBuscarInDto aveBuscarInDto) {		
-		return this.aveService.buscarAve(aveBuscarInDto.getNombre(), aveBuscarInDto.getCdZona());
+	@PostMapping(ConstantesUtil.BUSCAR_AVES)
+	public List<AveDto> findAve(@RequestBody AveBuscarDtoIn aveBuscarDtoIn) {		
+		return this.aveService.buscarAve(aveBuscarDtoIn.getNombre(), aveBuscarDtoIn.getCdZona());
 	}
-	
-	
-	
-	
+		
 	/**
 	 * Listar Paises
 	 * @return paises
