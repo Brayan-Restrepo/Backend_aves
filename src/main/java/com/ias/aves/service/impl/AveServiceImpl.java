@@ -89,7 +89,7 @@ public class AveServiceImpl implements AveService {
 
 	@Override
 	public List<AveDto> buscarAve(String nombre, String zona) {
-		List<Ave> aves = this.aveReepository.findByNombresLikeZonaLike(nombre, zona);
+		List<Ave> aves = this.aveReepository.findByNombresLikeZonaLike(nombre.toLowerCase(), zona);
 		return aves.stream().map(ave -> this.modelMapper.map(ave, AveDto.class)).collect(Collectors.toList());
 	}
 
